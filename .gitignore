@@ -1,0 +1,35 @@
+# Gradle
+build/
+.gradle/
+gradle/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+out/
+bin/
+
+# RetroFuturaGradle
+run/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Forge
+eclipse/
+.git-easymagic-backup/
+
+# Internal dev docs
+SPEC*.md
+NOTES*.md
+HANDOFF.md
+CONTEXT-CLICKSIM.md
+PORTING_RETROSPECTIVE.md

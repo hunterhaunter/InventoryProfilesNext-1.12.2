@@ -1,0 +1,17 @@
+[
+{
+    "modid": "inventoryprofilesnext",
+    "name": "Inventory Profiles Next",
+    "description": "Inventory sorting, auto-refill, locked slots, and more. Port of IPN to 1.12.2.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "guiFactory": "com.xy.ipn.config.IPNGuiFactory",
+    "authorList": ["anti-ad (original)", "XY (1.12.2 port)"],
+    "credits": "Original mod by anti-ad (Inventory Profiles Next)",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+}
+]
