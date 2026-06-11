@@ -52,6 +52,11 @@ public class LockedSlotHandler {
         return lockedSlots.contains(Integer.valueOf(slotIndex));
     }
 
+    /** True if at least one slot is locked. */
+    public static boolean hasAnyLocked() {
+        return !lockedSlots.isEmpty();
+    }
+
     @SubscribeEvent
     public void onDrawScreenPost(GuiScreenEvent.DrawScreenEvent.Post event) {
         if (!(event.getGui() instanceof GuiContainer)) {

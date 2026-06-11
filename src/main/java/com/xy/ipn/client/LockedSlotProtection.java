@@ -1,9 +1,16 @@
 package com.xy.ipn.client;
 
+import com.xy.ipn.client.action.ClientQuickMoveRouter;
 import com.xy.ipn.util.ContainerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiContainerCreative;
+import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotCrafting;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,6 +39,36 @@ public class LockedSlotProtection {
         Slot slotUnderMouse = gui.getSlotUnderMouse();
         if (slotUnderMouse == null) {
             return;
+        }
+
+        // ---- Locked slots must not RECEIVE items (original IPN behavior) ----
+        // Take over shift-clicks whose destination is the player inventory and
+        // route them around empty locked slots. Vanilla quick-move picks its
+        // own destinations and would fill them.
+        boolean shiftHeld = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)
+                || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
+        if (shiftHeld && Mouse.getEventButton() == 0 && Mouse.getEventButtonState()
+                && !(gui instanceof GuiContainerCreative)
+                && !(slotUnderMouse instanceof SlotCrafting)) {
+            if (!ContainerUtils.isPlayerSlot(slotUnderMouse)) {
+                // container slot → player inventory
+                if (ClientQuickMoveRouter.quickMoveToPlayer(
+                        gui.inventorySlots, slotUnderMouse.slotNumber, false)) {
+                    event.setCanceled(true);
+                    return;
+                }
+            } else if (gui instanceof GuiInventory
+                    && !isEquipmentRouted(slotUnderMouse.getStack())) {
+                // main ↔ hotbar move inside the player GUI (skip items vanilla
+                // routes to armor/offhand so shift-click-to-equip keeps working)
+                int srcIdx = ContainerUtils.getPlayerInvIndex(slotUnderMouse);
+                if (srcIdx >= 0 && srcIdx < 36 && !LockedSlotHandler.isLocked(srcIdx)
+                        && ClientQuickMoveRouter.quickMoveToPlayer(
+                                gui.inventorySlots, slotUnderMouse.slotNumber, true)) {
+                    event.setCanceled(true);
+                    return;
+                }
+            }
         }
 
         // Only protect player inventory storage slots (0-35)
@@ -113,6 +150,18 @@ public class LockedSlotProtection {
                 || (hotbarTarget >= 0 && LockedSlotHandler.isLocked(hotbarTarget))) {
             event.setCanceled(true);
         }
+    }
+
+    /**
+     * True when vanilla would route this stack to an armor/offhand slot on
+     * shift-click in the player GUI (shift-click-to-equip). Those moves are
+     * left to vanilla — armor and offhand slots cannot be locked anyway.
+     */
+    private static boolean isEquipmentRouted(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        EntityEquipmentSlot slot = EntityLiving.getSlotForItemStack(stack);
+        return slot.getSlotType() == EntityEquipmentSlot.Type.ARMOR
+                || slot == EntityEquipmentSlot.OFFHAND;
     }
 
     /**

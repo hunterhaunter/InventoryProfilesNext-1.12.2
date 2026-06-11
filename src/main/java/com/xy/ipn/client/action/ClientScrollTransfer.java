@@ -74,8 +74,12 @@ public final class ClientScrollTransfer {
         }
 
         if (fullStack) {
-            // Full stack: vanilla shift-click
-            ContainerClicker.shiftClick(slotId);
+            // Full stack: routed quick-move toward the player (skips empty
+            // locked slots); vanilla shift-click otherwise
+            if (toContainer
+                    || !ClientQuickMoveRouter.quickMoveToPlayer(container, slotId, false)) {
+                ContainerClicker.shiftClick(slotId);
+            }
             return;
         }
 
@@ -114,10 +118,13 @@ public final class ClientScrollTransfer {
             return slot;
         }
 
-        // Pass 2: first empty valid slot
+        // Pass 2: first empty valid slot — empty LOCKED player slots never
+        // receive items
         for (Slot slot : destSlots) {
             if (!slot.getStack().isEmpty()) continue;
             if (!slot.isItemValid(sourceStack)) continue;
+            if (slot.inventory instanceof InventoryPlayer
+                    && LockedSlotHandler.isLocked(slot.getSlotIndex())) continue;
             return slot;
         }
 

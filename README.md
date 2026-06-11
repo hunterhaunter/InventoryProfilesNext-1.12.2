@@ -24,6 +24,8 @@ A faithful backport of [Inventory Profiles Next](https://www.curseforge.com/mine
 
 ### Locked Slots
 - Lock any player inventory slot (`K` or Alt+Click) — locked slots are skipped by sorting, move-all, throw-all, refill, and shift-click/quick-move
+- Items can't **enter** empty locked slots either: shift-clicks route around them, and picked-up drops are instantly relocated to a free unlocked slot
+- Stacks already in a locked slot still top up normally (shift-click merge and pickup), so a locked food/block stack keeps refilling
 
 ### Quality of Life
 - **Move all** (`G`) — transfer everything between player inventory and container

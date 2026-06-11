@@ -85,7 +85,12 @@ public final class ClientMoveAll {
                 continue;
             }
 
-            ContainerClicker.shiftClick(slot.slotNumber);
+            if (toContainer) {
+                ContainerClicker.shiftClick(slot.slotNumber);
+            } else if (!ClientQuickMoveRouter.quickMoveToPlayer(container, slot.slotNumber, false)) {
+                // no locked slots (or router declined) — vanilla is identical
+                ContainerClicker.shiftClick(slot.slotNumber);
+            }
         }
     }
 

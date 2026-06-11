@@ -8,6 +8,7 @@ import com.xy.ipn.client.LockedSlotProtection;
 import com.xy.ipn.client.ScrollHandler;
 import com.xy.ipn.client.action.ClientAutoRefill;
 import com.xy.ipn.client.action.ClientContinuousCrafting;
+import com.xy.ipn.client.action.ClientLockedSlotPickupGuard;
 import com.xy.ipn.client.action.ClientProfiles;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.settings.KeyConflictContext;
@@ -78,5 +79,6 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new ScrollHandler());
         MinecraftForge.EVENT_BUS.register(new ClientContinuousCrafting());
         MinecraftForge.EVENT_BUS.register(new ClientAutoRefill());
+        MinecraftForge.EVENT_BUS.register(new ClientLockedSlotPickupGuard());
     }
 }
