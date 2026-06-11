@@ -2,9 +2,9 @@
 
 Take control over your inventory. Sort. Move matching/all items. Throw all items. Locked slots. Gear sets! And much more!
 
-A faithful backport of [Inventory Profiles Next](https://www.curseforge.com/minecraft/mc-mods/inventory-profiles-next) by [anti-ad / mirinimi](https://github.com/blackd/Inventory-Profiles) to **Minecraft 1.12.2 Forge**, rewritten from Kotlin to Java 8.
+A faithful backport of [Inventory Profiles Next](https://www.curseforge.com/minecraft/mc-mods/inventory-profiles-next) by [anti-ad / mirinimi](https://github.com/blackd/Inventory-Profiles) to **Forge 1.12.2**.
 
-**100% client-side** — like the original, every inventory operation is executed through vanilla window-click packets, so it works on **vanilla servers** and any modded server. Nothing to install server-side.
+**100% client-side**, every inventory operation is executed through vanilla window-click packets, so it works on **vanilla servers** and any modded server.
 
 ## Features
 
@@ -50,20 +50,6 @@ A faithful backport of [Inventory Profiles Next](https://www.curseforge.com/mine
 | `;` | Save current loadout as profile |
 | unbound | Apply profile 1 / 2 / 3 |
 
-## Installation
-
-1. Install [Minecraft Forge](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.12.2.html) for 1.12.2 (built against 14.23.5.2860)
-2. Drop the jar into your `mods` folder
-3. Client-side only — safe to join vanilla and modded servers
-
-## Building
-
-```
-./gradlew build
-```
-
-Requires JDK 8. Built with [RetroFuturaGradle](https://github.com/GTNewHorizons/retrofuturagradle), MCP stable_39 mappings. Jar lands in `build/libs/`.
-
 ## Differences from the Original
 
 Backported for the 1.12.2 input/GUI systems:
@@ -76,4 +62,4 @@ Backported for the 1.12.2 input/GUI systems:
 - Original mod: [Inventory Profiles Next](https://github.com/blackd/Inventory-Profiles) by **anti-ad / mirinimi** and contributors
 - 1.12.2 backport: **XY**
 
-Licensed under the [GNU Affero General Public License v3.0](LICENSE), same as the original.
+Licensed under the [GNU Affero General Public License v3.0](LICENSE).
