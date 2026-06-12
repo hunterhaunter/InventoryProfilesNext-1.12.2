@@ -11,14 +11,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.gui.inventory.GuiShulkerBox;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Slot;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -35,6 +38,9 @@ public class ButtonHandler {
 
     private static final int BUTTON_ID_BASE = 8000;
     private static final int BTN_SPACING = 12;
+    // Quark draws its chest search bar across the top of chest/shulker GUIs,
+    // overlapping our top container sort row. Cached once at class load.
+    private static final boolean QUARK_LOADED = Loader.isModLoaded("quark");
     private static final List<SortButton> sortButtons = new ArrayList<SortButton>();
     private static SortButton craftingCheckbox = null;
 
@@ -192,7 +198,11 @@ public class ButtonHandler {
 
         int nextId = BUTTON_ID_BASE;
         int btnSize = IPNConfig.buttonSize;
-        int rightEdge = guiLeft + xSize - 7;
+        // User-configurable nudge so the sort/move buttons can dodge other mods'
+        // overlays (e.g. Quark's search bar pinned to the top-right of the GUI).
+        int offsetX = IPNConfig.sortButtonOffsetX;
+        int offsetY = IPNConfig.sortButtonOffsetY;
+        int rightEdge = guiLeft + xSize - 7 + offsetX;
 
         boolean hasContainer = !isPlayerInvScreen && containerHasNonPlayerSlots(gui);
 
@@ -275,7 +285,12 @@ public class ButtonHandler {
 
         if (hasContainer) {
             // === CONTAINER GUI (chest, etc.) ===
-            int containerY = guiTop + 5;
+            // Quark's search bar lives at the top of chest/shulker GUIs and overlaps
+            // this top sort row. Auto-lift it above the GUI when Quark is present so
+            // users get a clean layout without touching the offset config.
+            boolean quarkSearchOverlap = QUARK_LOADED && IPNConfig.autoAdjustForQuark
+                    && (screen instanceof GuiChest || screen instanceof GuiShulkerBox);
+            int containerY = (quarkSearchOverlap ? guiTop - btnSize - 4 : guiTop + 5) + offsetY;
             int n = 0;
 
             SortButton cSortRow = new SortButton(nextId++,
@@ -306,7 +321,7 @@ public class ButtonHandler {
                 sortButtons.add(moveToPlayer);
             }
 
-            int playerY = guiTop + ySize - 95;
+            int playerY = guiTop + ySize - 95 + offsetY;
             if (IPNConfig.showMoveAllButtons) {
                 SortButton moveToCont = new SortButton(nextId++,
                         rightEdge - btnSize, playerY,
@@ -325,7 +340,7 @@ public class ButtonHandler {
             }
         } else {
             // === PLAYER INVENTORY or no-container GUI ===
-            int playerY = guiTop + ySize - 95;
+            int playerY = guiTop + ySize - 95 + offsetY;
             int n = 0;
 
             SortButton pSortRow = new SortButton(nextId++,

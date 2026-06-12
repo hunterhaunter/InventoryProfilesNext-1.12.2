@@ -32,6 +32,15 @@ public class IPNConfig {
     public static int buttonSize = 10;
     public static boolean showMoveAllButtons = true;
     public static boolean playSortSound = true;
+    // Pixel nudge for the in-GUI sort/move buttons, to dodge other mods'
+    // overlays (e.g. Quark's search bar). Positive X = right, positive Y = down.
+    public static int sortButtonOffsetX = 0;
+    public static int sortButtonOffsetY = 0;
+    // When Quark is installed, its chest search bar sits across the top of chest
+    // GUIs (guiLeft+81 .. guiLeft+169) and overlaps our top container sort row.
+    // With this on, that row is lifted above the GUI automatically so users don't
+    // have to set a manual offset. Manual offsets still stack on top.
+    public static boolean autoAdjustForQuark = true;
 
     // Item highlight
     public static boolean enableItemHighlight = true;
@@ -84,6 +93,15 @@ public class IPNConfig {
                 "Show move-all buttons in container GUIs");
         playSortSound = config.getBoolean("playSortSound", guiCategory, true,
                 "Play a sound when sorting");
+        sortButtonOffsetX = config.getInt("sortButtonOffsetX", guiCategory, 0, -200, 200,
+                "Horizontal pixel offset for sort/move buttons (move right with +, "
+                        + "left with -). Use to dodge other mods' overlays like Quark's search bar.");
+        sortButtonOffsetY = config.getInt("sortButtonOffsetY", guiCategory, 0, -200, 200,
+                "Vertical pixel offset for sort/move buttons (down with +, up with -).");
+        autoAdjustForQuark = config.getBoolean("autoAdjustForQuark", guiCategory, true,
+                "If Quark is installed, automatically lift the top chest sort buttons above "
+                        + "the GUI so they don't overlap Quark's search bar. Disable to position "
+                        + "them yourself with the offset options.");
         enableItemHighlight = config.getBoolean("enableItemHighlight", guiCategory, true,
                 "Highlight all matching items when hovering over one");
         // ARGB colors with alpha >= 0x80 are negative ints — a 0..0xFFFFFFFF

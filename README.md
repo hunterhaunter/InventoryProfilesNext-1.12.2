@@ -36,6 +36,11 @@ A faithful backport of [Inventory Profiles Next](https://www.curseforge.com/mine
 - **Item highlight** — highlights all matching stacks when hovering an item
 - Full in-game config GUI (`O` or Mods → Config)
 
+## Mod Compatibility
+
+- **Quark** — Quark's chest search bar sits across the top of chest/shulker GUIs and used to overlap the sort buttons. When Quark is installed, the top chest sort row is now lifted above the GUI automatically so the two never collide. Toggle with `autoAdjustForQuark` in the `gui` config.
+- **Button position** — `sortButtonOffsetX` / `sortButtonOffsetY` (config category `gui`) nudge the sort/move buttons by any pixel amount to dodge other mods' overlays. Manual offsets stack on top of the Quark auto-adjust.
+
 ## Controls (all rebindable, category "Inventory Profiles Next")
 
 | Key | Action |
