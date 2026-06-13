@@ -26,10 +26,3 @@ Thumbs.db
 # Forge
 eclipse/
 .git-easymagic-backup/
-
-# Internal dev docs
-SPEC*.md
-NOTES*.md
-HANDOFF.md
-CONTEXT-CLICKSIM.md
-PORTING_RETROSPECTIVE.md
